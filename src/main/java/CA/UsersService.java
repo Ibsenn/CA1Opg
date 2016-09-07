@@ -53,7 +53,7 @@ public class UsersService extends Observable implements Runnable
   {
     for (Observer observer : observers)
     {
-      observer.update(this, observers);
+      observer.update(this, TCPServer.users);
     }
 
   }
