@@ -22,7 +22,6 @@ public class TCPServer
 
   static String ip;
   static int portNum;
-  static ArrayList<User> users = new ArrayList<>();
   static ServerSocket ss;
 
   public static void main(String[] args) throws IOException
@@ -35,6 +34,9 @@ public class TCPServer
     ss = new ServerSocket();
     ss.bind(new InetSocketAddress(ip, portNum));
     System.out.println("Server started - listening on port " + portNum + " bound to ip " + ip);
+    UsersService s = new UsersService();
+    new Thread(s).start();
+    
     while (true)
     {
       Socket link = ss.accept();
@@ -43,13 +45,12 @@ public class TCPServer
       PrintWriter prnt = new PrintWriter(link.getOutputStream(), true);
       Scanner scn = new Scanner(link.getInputStream());
 
-      UsersService s = new UsersService();
-     
       
       Client c = new Client(link);
       s.register(c);
       c.start();
       
+
     }
   }
 }

@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,62 +18,81 @@ import java.util.logging.Logger;
  *
  * @author Mathias
  */
-public class Client extends Thread implements Observer
+public class Client extends Thread implements IObserver
 {
 
-    Socket link;
+  Socket link;
 
-    PrintWriter prnt;
+  static PrintWriter prnt;
 
-    public Client(Socket link)
+  public Client(Socket link)
+  {
+    this.link = link;
+  }
+
+  public void run()
+  {
+
+    try
     {
-        this.link = link;
-    }
 
-    public void run()
-    {
+      prnt = new PrintWriter(link.getOutputStream(), true);
+      Scanner scn = new Scanner(link.getInputStream());
 
-        try
+      prnt.println("Welcome to Echo. Please type a username and press enter");
+      String msg = "";
+      msg = scn.nextLine();
+      if (msg.contains("LOGIN:"))
+      {
+        String[] parts = msg.split(":");
+        String username = parts[1];
+        UsersService.users.add(new User(username));
+        UsersService.userLogin();
+
+        //if()
         {
+          prnt.println("You are connected as: " + username);
+          while (!msg.contains("LOGOUT:"))
+          {
 
-            prnt = new PrintWriter(link.getOutputStream(), true);
-            Scanner scn = new Scanner(link.getInputStream());
-
-            prnt.println("Welcome to Echo. Please type a username and press enter");
-            String msg = "";
-            msg = scn.nextLine();
-            if (msg.contains("LOGIN:"))
-            {
-                String[] parts = msg.split(":");
-                String username = parts[1];
-                TCPServer.users.add(new User(username));
-
-                //if()
-                {
-                    prnt.println("You are connected as: " + username);
-                    while (!msg.contains("LOGOUT:"))
-                    {
-
-                    }
-                }
-            }
-
-        } catch (IOException ex)
-        {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+          }
         }
+      }
 
-    }
-
-    @Override
-    public void update(Observable o, Object arg)
+    } catch (IOException ex)
     {
-        String users = "CLIENTLIST: ";
-
-        for (int i = 0; i < TCPServer.users.size(); i++)
-        {
-            users += TCPServer.users.get(i).getUsername();
-        }
-        prnt.println(users);
+      Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
     }
+
+  }
+
+  public void update(Observable o, Object arg)
+  {
+
+    String users = "CLIENTLIST:";
+
+    for (int i = 0; i < UsersService.users.size(); i++)
+    {
+
+      users += UsersService.users.get(i).getUsername();
+
+    }
+
+    prnt.println(users);
+  }
+
+  @Override
+  public void update(ArrayList<User> o)
+  {
+    String users = "CLIENTLIST:";
+    
+    for (int i = 0; i <UsersService.users.size(); i++)
+    {
+      users += UsersService.users.get(i).getUsername() + ", " ;
+
+    }
+
+    prnt.println(users);
+  
+  }
 }

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-
 /**
  *
  * @author Mathias
@@ -17,8 +16,10 @@ import java.util.Observer;
 public class UsersService extends Observable implements Runnable
 {
 
-  private ArrayList<Observer> observers;
+  static ArrayList<User> users = new ArrayList<>();
+  private static ArrayList<IObserver> observers;
   public int usersOnline = 0;
+  boolean b = true;
 
   public UsersService()
   {
@@ -29,31 +30,38 @@ public class UsersService extends Observable implements Runnable
   {
     while (true)
     {
-      if (usersOnline != TCPServer.users.size())
+      if (usersOnline != users.size())
+      //if(b)
       {
+        System.out.println("inde");
         notifyObserver();
-        usersOnline = TCPServer.users.size();
+        usersOnline = users.size();
+        //b = false;
       }
     }
   }
 
-
-  public void register(Observer o)
+  public static void userLogin()
+  {
+    notifyObserver();
+  }
+  
+  public void register(IObserver o)
   {
     observers.add(o);
   }
 
-  public void unregister(Observer deleteObserver)
+  public void unregister(IObserver deleteObserver)
   {
     System.out.println("Observer" + (deleteObserver) + "deleted");
     observers.remove(deleteObserver);
   }
 
-  public void notifyObserver()
+  public static void notifyObserver()
   {
-    for (Observer observer : observers)
+    for (IObserver observer : observers)
     {
-      observer.update(this, TCPServer.users);
+      observer.update(users);
     }
 
   }
