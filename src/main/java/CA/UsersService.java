@@ -18,11 +18,11 @@ public class UsersService extends Observable implements Runnable
 {
 
   private ArrayList<Observer> observers;
-  public int usersOnline;
+  public int usersOnline = 0;
 
   public UsersService()
   {
-    observers = new ArrayList<Observer>();
+    observers = new ArrayList<>();
   }
 
   public void run()
@@ -33,10 +33,8 @@ public class UsersService extends Observable implements Runnable
       {
         notifyObserver();
         usersOnline = TCPServer.users.size();
-
       }
     }
-
   }
 
 
