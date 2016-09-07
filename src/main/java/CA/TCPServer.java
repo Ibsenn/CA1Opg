@@ -44,6 +44,7 @@ public class TCPServer
       Scanner scn = new Scanner(link.getInputStream());
 
       UsersService s = new UsersService();
+     
       
       Client c = new Client(link);
       s.register(c);

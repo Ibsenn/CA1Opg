@@ -10,7 +10,7 @@ package CA;
  *
  * @author Mathias
  */
-public class User extends Thread
+public class User
 {
 
   String username;
@@ -19,10 +19,9 @@ public class User extends Thread
   {
     this.username = username;
   }
-
-
-  public void run()
+  
+  public String getUsername()
   {
-    
+      return username; 
   }
 }
