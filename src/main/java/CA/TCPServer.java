@@ -43,27 +43,12 @@ public class TCPServer
       PrintWriter prnt = new PrintWriter(link.getOutputStream(), true);
       Scanner scn = new Scanner(link.getInputStream());
 
+      UsersService s = new UsersService();
+      
       Client c = new Client(link);
+      s.register(c);
       c.start();
+      
     }
-
-//  public static void getTime(Socket s)
-//  {
-//    try
-//    {
-//      PrintWriter prnt = new PrintWriter(s.getOutputStream(), true);
-//
-//      SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-//      Date date = new Date();
-//      prnt.println("Current time: " + dateFormat.format(date));
-//
-//      s.close();
-//      prnt.close();
-//    } catch (IOException ex)
-//    {
-//      Logger.getLogger(TCPServer.class.getName()).log(Level.SEVERE, null, ex);
-//    }
-//
-//  }
   }
 }

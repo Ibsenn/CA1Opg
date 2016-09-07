@@ -3,6 +3,8 @@ package CA;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,7 +18,7 @@ import java.util.logging.Logger;
  *
  * @author Mathias
  */
-public class Client extends Thread
+public class Client extends Thread implements Observer
 {
 
   Socket link;
@@ -44,13 +46,12 @@ public class Client extends Thread
 
         //if()
         {
-        prnt.println("You are connected as: " + username);
-          while(!msg.contains("LOGOUT:"))
+          prnt.println("You are connected as: " + username);
+          while (!msg.contains("LOGOUT:"))
           {
-            
+
           }
         }
-        
       }
 
     } catch (IOException ex)
@@ -58,5 +59,11 @@ public class Client extends Thread
       Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
     }
 
+  }
+
+  @Override
+  public void update(Observable o, Object arg)
+  {
+    System.out.println(arg);
   }
 }

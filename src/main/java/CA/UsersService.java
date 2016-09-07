@@ -5,24 +5,60 @@
  */
 package CA;
 
-import javafx.beans.Observable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import javafx.beans.InvalidationListener;
+
 
 /**
  *
  * @author Mathias
  */
-public class UsersService extends Thread implements Observable
+public class UsersService extends Observable implements Runnable
 {
-  
+
+  private ArrayList<Observer> observers;
   public int usersOnline;
-  
+
+  public UsersService()
+  {
+    observers = new ArrayList<Observer>();
+  }
+
   public void run()
   {
-    while(true)
+    while (true)
     {
-      TCPServer.users.size();
+      if (usersOnline != TCPServer.users.size())
+      {
+        notifyObserver();
+        usersOnline = TCPServer.users.size();
+
+      }
     }
+
   }
-  
-  
+
+
+  public void register(Observer o)
+  {
+    observers.add(o);
+  }
+
+  public void unregister(Observer deleteObserver)
+  {
+    System.out.println("Observer" + (deleteObserver) + "deleted");
+    observers.remove(deleteObserver);
+  }
+
+  public void notifyObserver()
+  {
+    for (Observer observer : observers)
+    {
+      observer.update(this, observers);
+    }
+
+  }
 }
