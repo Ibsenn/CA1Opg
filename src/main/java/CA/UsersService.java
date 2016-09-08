@@ -31,12 +31,9 @@ public class UsersService extends Observable implements Runnable
     while (true)
     {
       if (usersOnline != users.size())
-      //if(b)
       {
-        System.out.println("inde");
         notifyObserver();
         usersOnline = users.size();
-        //b = false;
       }
     }
   }

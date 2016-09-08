@@ -11,6 +11,8 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -20,37 +22,59 @@ import java.util.Scanner;
 public class TCPServer
 {
 
-  static String ip;
-  static int portNum;
-  static ServerSocket ss;
+  static String ip = "localhost";
+  static int portNum = 8080;
+  Map<String, Client> clients = new HashMap();
+
+  public void AddUser(String username, Client c)
+  {
+    clients.put(username, c);
+
+    String msg = "CLIENTLIST:";
+
+    for (String name : clients.keySet())
+    {
+      msg += name + ",";
+    }
+    for (Client client : clients.values())
+    {
+      client.send(msg);
+    }
+  }
 
   public static void main(String[] args) throws IOException
   {
+    System.out.println("server started");
     if (args.length == 2)
     {
       ip = args[0];
       portNum = Integer.parseInt(args[1]);
     }
+
+    new TCPServer().StartServer();
+  }
+
+  public void StartServer() throws IOException
+  {
+
+    ServerSocket ss;
     ss = new ServerSocket();
+
     ss.bind(new InetSocketAddress(ip, portNum));
     System.out.println("Server started - listening on port " + portNum + " bound to ip " + ip);
-    UsersService s = new UsersService();
-    new Thread(s).start();
-    
+//    UsersService s = new UsersService();
+//
+//    new Thread(s)
+//            .start();
+
     while (true)
     {
       Socket link = ss.accept();
       System.out.println("New client connection");
 
-      PrintWriter prnt = new PrintWriter(link.getOutputStream(), true);
-      Scanner scn = new Scanner(link.getInputStream());
-
-      
-      Client c = new Client(link);
-      s.register(c);
+      Client c = new Client(link, this);
       c.start();
-      
-
     }
+
   }
 }

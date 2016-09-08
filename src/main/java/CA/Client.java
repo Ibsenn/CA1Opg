@@ -3,8 +3,6 @@ package CA;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Observable;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,15 +16,23 @@ import java.util.logging.Logger;
  *
  * @author Mathias
  */
-public class Client extends Thread implements IObserver
+public class Client extends Thread
 {
 
   Socket link;
 
-  static PrintWriter prnt;
+  PrintWriter prnt;
+  String username;
+  TCPServer server;
 
-  public Client(Socket link)
+  public void send(String msg)
   {
+    prnt.println(msg);
+  }
+  
+  public Client(Socket link, TCPServer s)
+  {
+    this.server = s;
     this.link = link;
   }
 
@@ -39,19 +45,20 @@ public class Client extends Thread implements IObserver
       prnt = new PrintWriter(link.getOutputStream(), true);
       Scanner scn = new Scanner(link.getInputStream());
 
-      prnt.println("Welcome to Echo. Please type a username and press enter");
+      //prnt.println("Welcome to Echo. Please type a username and press enter");
       String msg = "";
       msg = scn.nextLine();
       if (msg.contains("LOGIN:"))
       {
         String[] parts = msg.split(":");
         String username = parts[1];
-        UsersService.users.add(new User(username));
-        UsersService.userLogin();
+        server.AddUser(username, this);
+        //UsersService.users.add(new User(username));
+        //UsersService.userLogin();
 
         //if()
         {
-          prnt.println("You are connected as: " + username);
+          //prnt.println("You are connected as: " + username);
           while (!msg.contains("LOGOUT:"))
           {
 
@@ -66,33 +73,4 @@ public class Client extends Thread implements IObserver
 
   }
 
-  public void update(Observable o, Object arg)
-  {
-
-    String users = "CLIENTLIST:";
-
-    for (int i = 0; i < UsersService.users.size(); i++)
-    {
-
-      users += UsersService.users.get(i).getUsername();
-
-    }
-
-    prnt.println(users);
-  }
-
-  @Override
-  public void update(ArrayList<User> o)
-  {
-    String users = "CLIENTLIST:";
-    
-    for (int i = 0; i <UsersService.users.size(); i++)
-    {
-      users += UsersService.users.get(i).getUsername() + ", " ;
-
-    }
-
-    prnt.println(users);
-  
-  }
 }
