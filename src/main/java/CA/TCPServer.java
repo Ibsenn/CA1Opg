@@ -31,7 +31,7 @@ public class TCPServer
     clients.put(username, c);
     PrintClientList();
   }
-  
+
   public void RemoveUser(String username, Client c)
   {
     clients.remove(username, c);
@@ -51,7 +51,7 @@ public class TCPServer
       client.send(msg);
     }
   }
-  
+
   public void SendMessage(String recievers, String message, String sender)
   {
     String msgRes = "MSGRES:" + sender + ":" + message;
@@ -64,11 +64,11 @@ public class TCPServer
     } else
     {
       String[] recieversParts = recievers.split(",");
-      for (Client client : clients.values())
+      for (int i = 0; i < recieversParts.length; i++)
       {
-        for (int i = 0; i < recieversParts.length; i++)
+        for (Client client : clients.values())
         {
-          if (client.equals(i))
+          if (recieversParts[i].equals(client.username))
           {
             client.send(msgRes);
           }

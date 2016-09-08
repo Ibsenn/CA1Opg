@@ -50,7 +50,7 @@ public class Client extends Thread
       if (msg.contains("LOGIN:"))
       {
         String[] parts = msg.split(":");
-        String username = parts[1];
+        username = parts[1];
         server.AddUser(username, this);
 
         while (!msg.contains("LOGOUT:"))
@@ -77,5 +77,6 @@ public class Client extends Thread
     }
 
   }
+  
 
 }
