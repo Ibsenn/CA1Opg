@@ -29,10 +29,10 @@ public class Client extends Thread
   {
     prnt.println(msg);
   }
-  
-  public Client(Socket link, TCPServer s)
+
+  public Client(Socket link, TCPServer server)
   {
-    this.server = s;
+    this.server = server;
     this.link = link;
   }
 
@@ -45,7 +45,6 @@ public class Client extends Thread
       prnt = new PrintWriter(link.getOutputStream(), true);
       Scanner scn = new Scanner(link.getInputStream());
 
-      //prnt.println("Welcome to Echo. Please type a username and press enter");
       String msg = "";
       msg = scn.nextLine();
       if (msg.contains("LOGIN:"))
@@ -53,17 +52,23 @@ public class Client extends Thread
         String[] parts = msg.split(":");
         String username = parts[1];
         server.AddUser(username, this);
-        //UsersService.users.add(new User(username));
-        //UsersService.userLogin();
 
-        //if()
+        while (!msg.contains("LOGOUT:"))
         {
-          //prnt.println("You are connected as: " + username);
-          while (!msg.contains("LOGOUT:"))
+          msg = scn.nextLine();
+          
+          if(msg.contains("MSG:"))
           {
-
+            String[] msgParts = msg.split(":");
+            String recievers = msgParts[1];
+            String message = msgParts[2];
+            server.SendMessage(recievers, message);
           }
         }
+        server.RemoveUser(username, this);
+        System.out.println("logged out");
+        link.close();
+
       }
 
     } catch (IOException ex)

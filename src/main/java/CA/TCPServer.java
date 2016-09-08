@@ -29,7 +29,17 @@ public class TCPServer
   public void AddUser(String username, Client c)
   {
     clients.put(username, c);
+    PrintClientList();
+  }
+  
+  public void RemoveUser(String username, Client c)
+  {
+    clients.remove(username, c);
+    PrintClientList();
+  }
 
+  public void PrintClientList()
+  {
     String msg = "CLIENTLIST:";
 
     for (String name : clients.keySet())
@@ -39,6 +49,30 @@ public class TCPServer
     for (Client client : clients.values())
     {
       client.send(msg);
+    }
+  }
+
+  public void SendMessage(String recievers, String message)
+  {
+    if (recievers.isEmpty())
+    {
+      for (Client client : clients.values())
+      {
+        client.send(message);
+      }
+    } else
+    {
+      String[] recieversParts = recievers.split(",");
+      for (Client client : clients.values())
+      {
+        for (int i = 0; i < recieversParts.length; i++)
+        {
+          if (client.equals(i))
+          {
+            client.send(message);
+          }
+        }
+      }
     }
   }
 
@@ -62,10 +96,6 @@ public class TCPServer
 
     ss.bind(new InetSocketAddress(ip, portNum));
     System.out.println("Server started - listening on port " + portNum + " bound to ip " + ip);
-//    UsersService s = new UsersService();
-//
-//    new Thread(s)
-//            .start();
 
     while (true)
     {
