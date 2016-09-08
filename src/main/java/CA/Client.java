@@ -62,7 +62,7 @@ public class Client extends Thread
             String[] msgParts = msg.split(":");
             String recievers = msgParts[1];
             String message = msgParts[2];
-            server.SendMessage(recievers, message);
+            server.SendMessage(recievers, message, username);
           }
         }
         server.RemoveUser(username, this);

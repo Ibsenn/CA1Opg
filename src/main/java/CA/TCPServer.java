@@ -51,14 +51,15 @@ public class TCPServer
       client.send(msg);
     }
   }
-
-  public void SendMessage(String recievers, String message)
+  
+  public void SendMessage(String recievers, String message, String sender)
   {
+    String msgRes = "MSGRES:" + sender + ":" + message;
     if (recievers.isEmpty())
     {
       for (Client client : clients.values())
       {
-        client.send(message);
+        client.send(msgRes);
       }
     } else
     {
@@ -69,7 +70,7 @@ public class TCPServer
         {
           if (client.equals(i))
           {
-            client.send(message);
+            client.send(msgRes);
           }
         }
       }
