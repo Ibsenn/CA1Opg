@@ -67,16 +67,10 @@ public class TCPServer {
     }
 
     public static void main(String[] args) throws IOException {
-        try {
-            Log.setLogFile("logFile.txt", "ServerLog");
+        if (args.length == 2) {
             System.out.println("server started");
-            if (args.length == 2) {
-                ip = args[0];
-                portNum = Integer.parseInt(args[1]);
-            }
-            Logger.getLogger(Log.LOG_NAME).log(Level.INFO, "Starting the Server");
-        } finally {
-            Log.closeLogger();
+            ip = args[0];
+            portNum = Integer.parseInt(args[1]);
         }
         new TCPServer().StartServer(portNum, ip);
 
@@ -93,19 +87,23 @@ public class TCPServer {
 //        }
 //    }
     public void StartServer(int portNum, String ip) throws IOException {
+        try {
+            Log.setLogFile("logFile.txt", "ServerLog");
+            ServerSocket ss;
+            ss = new ServerSocket();
 
-        ServerSocket ss;
-        ss = new ServerSocket();
+            ss.bind(new InetSocketAddress(ip, portNum));
+            Logger.getLogger(Log.LOG_NAME).log(Level.INFO, "Starting the Server");
+            Logger.getLogger(Log.LOG_NAME).log(Level.INFO, "Server started - listening on port: " + portNum + " bound to ip: " + ip);
 
-        ss.bind(new InetSocketAddress(ip, portNum));
-        System.out.println("Server started - listening on port " + portNum + " bound to ip " + ip);
-
-        while (true) {
-            Socket link = ss.accept();
-            System.out.println("New client connection");
-
-            Client c = new Client(link, this);
-            c.start();
+            while (true) {
+                Socket link = ss.accept();
+                Logger.getLogger(Log.LOG_NAME).log(Level.INFO, "New client connected");
+                Client c = new Client(link, this);
+                c.start();
+            }
+        } finally {
+            Log.closeLogger();
         }
     }
 }

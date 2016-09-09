@@ -66,6 +66,7 @@ public class Client extends Thread
           }
         }
         server.RemoveUser(username, this);
+        Logger.getLogger(Log.LOG_NAME).log(Level.INFO, "Client " + username + " disconnected");
         link.close();
 
       }
