@@ -44,7 +44,7 @@ public class Client extends Thread
 
       prnt = new PrintWriter(link.getOutputStream(), true);
       Scanner scn = new Scanner(link.getInputStream());
-
+      
       String msg = "";
       msg = scn.nextLine();
       if (msg.contains("LOGIN:"))
