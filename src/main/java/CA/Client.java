@@ -66,7 +66,6 @@ public class Client extends Thread
           }
         }
         server.RemoveUser(username, this);
-        System.out.println(username + " logged out");
         link.close();
 
       }

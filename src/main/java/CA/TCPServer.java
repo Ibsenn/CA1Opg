@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -65,17 +67,23 @@ public class TCPServer {
     }
 
     public static void main(String[] args) throws IOException {
-        System.out.println("server started");
-        if (args.length == 2) {
-            ip = args[0];
-            portNum = Integer.parseInt(args[1]);
+        try {
+            Log.setLogFile("logFile.txt", "ServerLog");
+            System.out.println("server started");
+            if (args.length == 2) {
+                ip = args[0];
+                portNum = Integer.parseInt(args[1]);
+            }
+            Logger.getLogger(Log.LOG_NAME).log(Level.INFO, "Starting the Server");
+        } finally {
+            Log.closeLogger();
         }
-            new TCPServer().StartServer(portNum, ip);
+        new TCPServer().StartServer(portNum, ip);
+
     }
-    
+
     // Erstattes med metoden ovenfor, hvis Digital Ocean skal køre koden
     // Variablerne "ip" og "portNum" skal instantieres på linje 24 og 25.
-    
 //    public static void main(String[] args) throws IOException {
 //        System.out.println("server started");
 //        if (args.length == 2) {
@@ -84,7 +92,6 @@ public class TCPServer {
 //            new TCPServer().StartServer(portNum, ip);
 //        }
 //    }
-
     public void StartServer(int portNum, String ip) throws IOException {
 
         ServerSocket ss;
@@ -100,6 +107,5 @@ public class TCPServer {
             Client c = new Client(link, this);
             c.start();
         }
-
     }
 }
