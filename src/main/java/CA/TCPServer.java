@@ -23,8 +23,8 @@ import java.util.logging.Logger;
  */
 public class TCPServer {
 
-    static String ip = "localhost";
-    static int portNum = 8080;
+    static String ip;
+    static int portNum;
     Map<String, Client> clients = new HashMap();
 
     public void AddUser(String username, Client c) {
@@ -66,26 +66,26 @@ public class TCPServer {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        if (args.length == 2) {
-            System.out.println("server started");
-            ip = args[0];
-            portNum = Integer.parseInt(args[1]);
-        }
-        new TCPServer().StartServer(portNum, ip);
-
-    }
+//    public static void main(String[] args) throws IOException {
+//        if (args.length == 2) {
+//            System.out.println("server started");
+//            ip = args[0];
+//            portNum = Integer.parseInt(args[1]);
+//        }
+//        new TCPServer().StartServer(portNum, ip);
+//
+//    }
 
     // Erstattes med metoden ovenfor, hvis Digital Ocean skal køre koden
     // Variablerne "ip" og "portNum" skal instantieres på linje 24 og 25.
-//    public static void main(String[] args) throws IOException {
-//        System.out.println("server started");
-//        if (args.length == 2) {
-//            String ip = args[0];
-//            int portNum = Integer.parseInt(args[1]);
-//            new TCPServer().StartServer(portNum, ip);
-//        }
-//    }
+    public static void main(String[] args) throws IOException {
+        System.out.println("server started");
+        if (args.length == 2) {
+            String ip = args[0];
+            int portNum = Integer.parseInt(args[1]);
+            new TCPServer().StartServer(portNum, ip);
+        }
+    }
     public void StartServer(int portNum, String ip) throws IOException {
         try {
             Log.setLogFile("logFile.txt", "ServerLog");
