@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package CA;
 
 import java.io.IOException;
@@ -17,14 +12,11 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Mathias
- */
+
 public class TCPServer {
 
-    static String ip;
-    static int portNum;
+    static String ip = "localhost";
+    static int portNum = 8080;
     Map<String, Client> clients = new HashMap();
 
     public void AddUser(String username, Client c) {
@@ -66,26 +58,27 @@ public class TCPServer {
         }
     }
 
-//    public static void main(String[] args) throws IOException {
-//        if (args.length == 2) {
-//            System.out.println("server started");
-//            ip = args[0];
-//            portNum = Integer.parseInt(args[1]);
-//        }
-//        new TCPServer().StartServer(portNum, ip);
-//
-//    }
+    public static void main(String[] args) throws IOException {
+        if (args.length == 2) {
+            System.out.println("server started");
+            ip = args[0];
+            portNum = Integer.parseInt(args[1]);
+        }
+        new TCPServer().StartServer(portNum, ip);
+
+    }
 
     // Erstattes med metoden ovenfor, hvis Digital Ocean skal køre koden
     // Variablerne "ip" og "portNum" skal instantieres på linje 24 og 25.
-    public static void main(String[] args) throws IOException {
-        System.out.println("server started");
-        if (args.length == 2) {
-            String ip = args[0];
-            int portNum = Integer.parseInt(args[1]);
-            new TCPServer().StartServer(portNum, ip);
-        }
-    }
+//    public static void main(String[] args) throws IOException {
+//        System.out.println("server started");
+//        if (args.length == 2) {
+//            String ip = args[0];
+//            int portNum = Integer.parseInt(args[1]);
+//            new TCPServer().StartServer(portNum, ip);
+//        }
+//    }
+    
     public void StartServer(int portNum, String ip) throws IOException {
         try {
             Log.setLogFile("logFile.txt", "ServerLog");
