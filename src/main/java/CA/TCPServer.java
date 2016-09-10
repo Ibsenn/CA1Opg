@@ -15,12 +15,12 @@ import java.util.logging.Logger;
 
 public class TCPServer {
 
-    private boolean serverUp = true;
+    private static boolean serverUp = true;
     static String ip = "localhost";
     static int portNum = 8080;
     Map<String, Client> clients = new HashMap();
 
-    public void stopServer()
+    public static void stopServer()
     {
       serverUp = false;
     }
