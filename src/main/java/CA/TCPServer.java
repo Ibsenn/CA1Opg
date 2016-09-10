@@ -23,10 +23,16 @@ import java.util.logging.Logger;
  */
 public class TCPServer {
 
+    private boolean serverUp = true;
     static String ip;
     static int portNum;
     Map<String, Client> clients = new HashMap();
 
+    public void stopServer()
+    {
+      serverUp = false;
+    }
+    
     public void AddUser(String username, Client c) {
         clients.put(username, c);
         PrintClientList();
@@ -65,6 +71,7 @@ public class TCPServer {
             }
         }
     }
+    
 
 //    public static void main(String[] args) throws IOException {
 //        if (args.length == 2) {
@@ -96,12 +103,13 @@ public class TCPServer {
             Logger.getLogger(Log.LOG_NAME).log(Level.INFO, "Starting the Server");
             Logger.getLogger(Log.LOG_NAME).log(Level.INFO, "Server started - listening on port: " + portNum + " bound to ip: " + ip);
 
-            while (true) {
+            while (serverUp) {
                 Socket link = ss.accept();
                 Logger.getLogger(Log.LOG_NAME).log(Level.INFO, "New client connected");
                 Client c = new Client(link, this);
                 c.start();
             }
+        ss.close();
         } finally {
             Log.closeLogger();
         }

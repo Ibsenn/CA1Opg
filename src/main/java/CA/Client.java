@@ -47,6 +47,19 @@ public class Client extends Thread
       
       String msg = "";
       msg = scn.nextLine();
+      
+//      while(true)
+//      {
+//        try
+//        {
+//          Thread.sleep(1000);
+//        } catch (InterruptedException ex)
+//        {
+//          Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        prnt.println("test");
+//      }
+      
       if (msg.contains("LOGIN:"))
       {
         String[] parts = msg.split(":");
